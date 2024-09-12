@@ -22,6 +22,9 @@ export default class Node {
     // 节点高
     height = 50
 
+    // 是否为根节点
+    isRoot = false
+
     constructor(option) {
         Object.assign(this, option || {})
         this.children = []

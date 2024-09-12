@@ -17,6 +17,7 @@ export default class TreeLayout {
 
     constructor(data) {
         this.root = this.convertObject(data)
+        this.root.isRoot = true
     }
 
     fetchShaps() {
