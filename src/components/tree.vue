@@ -17,10 +17,11 @@ export default {
   data() {
     return {
       ctx: null,
-      treeLayout: null,
+      bottomTree: null,
+      topTree: null,
       text: JSON.stringify(TestData, null, 2),
-      centerX: 400,
-      centerY: 500,
+      centerX: 460,
+      centerY: 400,
     }
   },
   mounted() {
@@ -31,10 +32,22 @@ export default {
       }, 20)
     })
   },
+  computed: {
+    shaps() {
+      if (!this.bottomTree || !this.topTree) return []
+      const list = [
+        ...this.bottomTree.fetchShaps(),
+        ...this.topTree.fetchShaps().filter((item) => !item.isRoot),
+      ]
+      return list
+    },
+  },
   methods: {
     layout() {
-      this.treeLayout = new TreeLayout(JSON.parse(this.text))
-      this.treeLayout.build(this.centerX, this.centerY, Direction.BOTTOM)
+      this.bottomTree = new TreeLayout(JSON.parse(this.text))
+      this.bottomTree.build(this.centerX, this.centerY, Direction.BOTTOM)
+      this.topTree = new TreeLayout(JSON.parse(this.text))
+      this.topTree.build(this.centerX, this.centerY, Direction.TOP)
     },
     drawLine(startNode, endNode) {
       this.ctx.save()
@@ -48,8 +61,8 @@ export default {
     },
     repaint() {
       this.ctx.clearRect(0, 0, 10000, 10000)
-      if (this.treeLayout) {
-        this.treeLayout.fetchShaps().forEach((item) => {
+      if (this.shaps?.length) {
+        this.shaps.forEach((item) => {
           item.draw(this.ctx)
           if (item.parent) {
             this.drawLine(item.parent, item)
