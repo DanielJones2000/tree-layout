@@ -7,8 +7,7 @@ export default {
             children: [
                 { name: 'Grandchild 1' },
                 { name: 'Grandchild 2' },
-                { name: 'Grandchild 3' },
-                { name: 'Grandchild 4' }
+                { name: 'Grandchild 3' }
             ]
         },
         {

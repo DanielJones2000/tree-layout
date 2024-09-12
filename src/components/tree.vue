@@ -11,14 +11,13 @@
 </template>
 <script>
 import TestData from '../test-data'
-import TreeLayout, { Direction } from './layout/tree'
+import TreeLayout from './layout/tree'
 
 export default {
   data() {
     return {
       ctx: null,
-      bottomTree: null,
-      topTree: null,
+      tree: null,
       text: JSON.stringify(TestData, null, 2),
       centerX: 460,
       centerY: 400,
@@ -32,25 +31,15 @@ export default {
       }, 20)
     })
   },
-  computed: {
-    shaps() {
-      // 每棵树中都有一个根节点，组合的列表过滤掉根，可以放置根节点绘制多次
-      if (!this.bottomTree || !this.topTree) return []
-      const list = [
-        ...this.bottomTree.fetchShaps(),
-        ...this.topTree.fetchShaps().filter((item) => !item.isRoot),
-      ]
-      return list
-    },
-  },
   methods: {
     layout() {
-      // 创建向下的tree
-      this.bottomTree = new TreeLayout(JSON.parse(this.text))
-      this.bottomTree.build(this.centerX, this.centerY, Direction.BOTTOM)
-      // 创建向上的tree
-      this.topTree = new TreeLayout(JSON.parse(this.text))
-      this.topTree.build(this.centerX, this.centerY, Direction.TOP)
+      this.tree = new TreeLayout({
+        top: JSON.parse(this.text),
+        bottom: JSON.parse(this.text),
+        // left: JSON.parse(this.text),
+        // right: JSON.parse(this.text),
+      })
+      this.tree.build(this.centerX, this.centerY)
     },
     drawLine(startNode, endNode) {
       this.ctx.save()
@@ -64,8 +53,8 @@ export default {
     },
     repaint() {
       this.ctx.clearRect(0, 0, 10000, 10000)
-      if (this.shaps?.length) {
-        this.shaps.forEach((item) => {
+      if (this.tree) {
+        this.tree.fetchShaps().forEach((item) => {
           item.draw(this.ctx)
           if (item.parent) {
             this.drawLine(item.parent, item)
