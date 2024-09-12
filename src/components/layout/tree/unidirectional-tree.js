@@ -1,8 +1,10 @@
 import BaseNode from './base-node'
 import Layout from './layout'
+import Link from './link'
 
 export default class UnidirectionalTree {
     shaps = []
+    lines = []
     root = null
     rootX = 0
     rootY = 0
@@ -21,11 +23,16 @@ export default class UnidirectionalTree {
         this.root.isRoot = true
     }
 
-    fetchShaps() {
+    getShaps() {
         return this.shaps
     }
 
+    getLines() {
+        return this.lines
+    }
+
     build(x, y, direction) {
+        this.lines = []
         this.rootX = x
         this.rootY = y
         this.direction = direction
@@ -37,6 +44,12 @@ export default class UnidirectionalTree {
             levelSpacing: this.levelSpacing,
             siblingSpacing: this.siblingSpacing
         })
+
+        this.shaps.forEach(item => {
+            if (!item.parent) return
+            this.lines.push(new Link(this.direction, item.parent.x, item.parent.y, item.x, item.y))
+        })
+
     }
 
     convertObject(data) {

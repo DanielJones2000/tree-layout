@@ -66,26 +66,46 @@ export default class MultiDirectionalTree {
         }
     }
 
-    fetchShaps() {
+    getShaps() {
         const list = []
         if (this.topTree) {
-            list.push(...this.topTree.fetchShaps())
+            list.push(...this.topTree.getShaps())
         }
 
         if (this.bottomTree) {
-            list.push(...this.bottomTree.fetchShaps())
+            list.push(...this.bottomTree.getShaps())
         }
 
         if (this.leftTree) {
-            list.push(...this.leftTree.fetchShaps())
+            list.push(...this.leftTree.getShaps())
         }
 
         if (this.rightTree) {
-            list.push(...this.rightTree.fetchShaps())
+            list.push(...this.rightTree.getShaps())
         }
 
         const root = list.find(item => item.isRoot)
 
         return [root, ...list.filter(item => !item.isRoot)]
+    }
+
+    getLines() {
+        const list = []
+        if (this.topTree) {
+            list.push(...this.topTree.getLines())
+        }
+
+        if (this.bottomTree) {
+            list.push(...this.bottomTree.getLines())
+        }
+
+        if (this.leftTree) {
+            list.push(...this.leftTree.getLines())
+        }
+
+        if (this.rightTree) {
+            list.push(...this.rightTree.getLines())
+        }
+        return list
     }
 }

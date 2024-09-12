@@ -35,31 +35,22 @@ export default {
     layout() {
       this.tree = new TreeLayout({
         levelSpacing: 80,
-        top: JSON.parse(this.text),
-        bottom: JSON.parse(this.text),
-        // left: JSON.parse(this.text),
-        // right: JSON.parse(this.text),
+        // top: JSON.parse(this.text),
+        // bottom: JSON.parse(this.text),
+        left: JSON.parse(this.text),
+        right: JSON.parse(this.text),
       })
       this.tree.build(this.centerX, this.centerY)
-    },
-    drawLine(startNode, endNode) {
-      this.ctx.save()
-      this.ctx.beginPath()
-      this.ctx.moveTo(startNode.x, startNode.y)
-      this.ctx.lineTo(startNode.x, (startNode.y + endNode.y) / 2)
-      this.ctx.lineTo(endNode.x, (startNode.y + endNode.y) / 2)
-      this.ctx.lineTo(endNode.x, endNode.y)
-      this.ctx.stroke()
-      this.ctx.restore()
     },
     repaint() {
       this.ctx.clearRect(0, 0, 10000, 10000)
       if (this.tree) {
-        this.tree.fetchShaps().forEach((item) => {
+        this.tree.getLines().forEach((item) => {
           item.draw(this.ctx)
-          if (item.parent) {
-            this.drawLine(item.parent, item)
-          }
+        })
+
+        this.tree.getShaps().forEach((item) => {
+          item.draw(this.ctx)
         })
       }
     },
