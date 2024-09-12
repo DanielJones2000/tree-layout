@@ -34,6 +34,7 @@ export default {
   },
   computed: {
     shaps() {
+      // 每棵树中都有一个根节点，组合的列表过滤掉根，可以放置根节点绘制多次
       if (!this.bottomTree || !this.topTree) return []
       const list = [
         ...this.bottomTree.fetchShaps(),
@@ -44,8 +45,10 @@ export default {
   },
   methods: {
     layout() {
+      // 创建向下的tree
       this.bottomTree = new TreeLayout(JSON.parse(this.text))
       this.bottomTree.build(this.centerX, this.centerY, Direction.BOTTOM)
+      // 创建向上的tree
       this.topTree = new TreeLayout(JSON.parse(this.text))
       this.topTree.build(this.centerX, this.centerY, Direction.TOP)
     },
