@@ -11,13 +11,13 @@
 </template>
 <script>
 import TestData from '../test-data'
-import * as Core from './layout/tree'
+import TreeLayout, { Direction } from './layout/tree'
 
 export default {
   data() {
     return {
       ctx: null,
-      tree: null,
+      treeLayout: null,
       text: JSON.stringify(TestData, null, 2),
       centerX: 400,
       centerY: 500,
@@ -33,17 +33,8 @@ export default {
   },
   methods: {
     layout() {
-      const treeData = Core.convertObject(
-        JSON.parse(this.text),
-        this.centerX,
-        this.centerY
-      )
-      this.tree = new Core.Tree({
-        root: treeData,
-        rootX: this.centerX,
-        rootY: this.centerX,
-      })
-      this.tree.layout(Core.Direction.BOTTOM)
+      this.treeLayout = new TreeLayout(JSON.parse(this.text))
+      this.treeLayout.build(this.centerX, this.centerY, Direction.BOTTOM)
     },
     drawLine(startNode, endNode) {
       this.ctx.save()
@@ -57,12 +48,14 @@ export default {
     },
     repaint() {
       this.ctx.clearRect(0, 0, 10000, 10000)
-      Core.fetchShaps().forEach((item) => {
-        item.draw(this.ctx)
-        if (item.parent) {
-          this.drawLine(item.parent, item)
-        }
-      })
+      if (this.treeLayout) {
+        this.treeLayout.fetchShaps().forEach((item) => {
+          item.draw(this.ctx)
+          if (item.parent) {
+            this.drawLine(item.parent, item)
+          }
+        })
+      }
     },
   },
 }

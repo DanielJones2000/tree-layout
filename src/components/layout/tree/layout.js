@@ -1,6 +1,6 @@
 import { Direction } from './constants'
 
-class Tree {
+class Layout {
     // 根节点
     root = null
 
@@ -18,32 +18,44 @@ class Tree {
     // 图元列表
     treeList = []
 
+    // 树布局的方向
+    direction = Direction.BOTTOM
+
     constructor(option) {
         Object.assign(this, option)
+        this.build(this.direction)
     }
 
-    layout(direction) {
+    /**
+     * 判断是否会水平放置
+     */
+    get isVertical() {
+        return this.direction === Direction.TOP || this.direction === Direction.BOTTOM
+    }
+
+    build(direction) {
+        this.treeList = []
+        this.direction = direction
         this.root.x = this.rootX
         this.root.y = this.rootY
-        this.treeList = []
         // 自根到叶子节点遍历并重定位
-        this.locationVLR(this.root, direction)
+        this.locationVLR(this.root)
         // 自叶子节点到根遍历并重定位
-        this.locationLRD(direction)
+        this.locationLRD()
     }
 
-    isVertical(direction) {
-        return direction === Direction.TOP || direction === Direction.BOTTOM
-    }
-
-    getChildrenDistance(direction, children) {
+    /**
+     * 获取叶子节点的总宽
+     * @param {*} children
+     * @returns
+     */
+    getChildrenDistance(children) {
         let distance = 0
         const distanceMap = {}
-        const isVertical = this.isVertical(direction)
 
         children.forEach((item, index) => {
             if (index === children.length - 1) return
-            if (isVertical) {
+            if (this.isVertical) {
                 distance += item.width + this.siblingSpacing
                 distanceMap[index] = distance
                 return
@@ -60,8 +72,10 @@ class Tree {
 
     /**
      * 先根遍历坐标
+     * @param {*} node
+     * @returns
      */
-    locationVLR(node, direction) {
+    locationVLR(node) {
         if (!this.treeList[node.level]) {
             this.treeList[node.level] = []
         }
@@ -70,22 +84,21 @@ class Tree {
             return
         }
 
-        const isVertical = this.isVertical(direction)
-        const { distance, distanceMap } = this.getChildrenDistance(direction, node.children)
+        const { distance, distanceMap } = this.getChildrenDistance(node.children)
 
-        const pos = isVertical ? node.x : node.y
+        const pos = this.isVertical ? node.x : node.y
         let startPos = pos - distance / 2
 
         node.children.forEach((item, index) => {
             const moveDistance = startPos + (distanceMap[index - 1] || 0)
-            if (isVertical) {
+            if (this.isVertical) {
                 item.x = moveDistance
             } else {
                 item.y = moveDistance
             }
 
             // 处理父子节点间距
-            switch (direction) {
+            switch (this.direction) {
                 case Direction.TOP:
                     item.y = node.y - item.height - this.levelSpacing
                     break
@@ -99,21 +112,20 @@ class Tree {
                     item.x = node.x + node.width + this.levelSpacing
             }
 
-            this.locationVLR(item, direction)
+            this.locationVLR(item)
         })
     }
 
     /**
      * 检查是否重叠
-     * @param {*} direction
      * @param {*} first
      * @param {*} second
      * @returns
      */
-    checkOverlap(direction, first, second) {
+    checkOverlap(first, second) {
         let a1 = 0
         let a2 = 0
-        if (this.isVertical(direction)) {
+        if (this.isVertical) {
             a1 = first.x + first.width
             a2 = second.x
         } else {
@@ -125,14 +137,12 @@ class Tree {
 
     /**
      * 移动当前节点所组成的子树
-     * @param {*} direction
      * @param {*} node
      * @param {*} pos
      */
-    moveTree(direction, node, pos) {
-        const isVertical = this.isVertical(direction)
+    moveTree(node, pos) {
         let diff = 0
-        if (isVertical) {
+        if (this.isVertical) {
             diff = pos - node.x
             node.x = pos
         } else {
@@ -142,26 +152,30 @@ class Tree {
         if (node?.children) {
             node.children.forEach(item => {
                 let newPos = 0
-                if (isVertical) {
+                if (this.isVertical) {
                     newPos = item.x + diff
                 } else {
                     newPos = item.y + diff
                 }
-                this.moveTree(direction, item, newPos)
+                this.moveTree(item, newPos)
             })
         }
     }
 
-    centerTree(direction, node) {
+    /**
+     * 设置叶子树剧中
+     * @param {*} node
+     * @returns
+     */
+    centerTree(node) {
         if (!node) return
-        const isVertical = this.isVertical(direction)
         let startPos = 0
         if (node.children.length <= 1) {
             return
         }
         const first = node.children.at(0)
         const last = node.children.at(-1)
-        if (isVertical) {
+        if (this.isVertical) {
             startPos = node.x - first.x - (last.x - first.x) / 2
         } else {
             startPos = node.y - first.y - (last.y - first.y) / 2
@@ -169,12 +183,12 @@ class Tree {
         if (!startPos) return
         node.children.forEach(item => {
             let newPos = 0
-            if (isVertical) {
+            if (this.isVertical) {
                 newPos = item.x + startPos
             } else {
                 newPos = item.y + startPos
             }
-            this.moveTree(direction, item, newPos)
+            this.moveTree(item, newPos)
         })
     }
 
@@ -189,16 +203,15 @@ class Tree {
     /**
      * 后根遍历
      */
-    locationLRD(direction) {
-        const isVertical = this.isVertical(direction)
+    locationLRD() {
         const list = [...this.treeList].reverse()
 
         list.forEach(layer => {
             layer.forEach((first, index) => {
                 const second = layer[index + 1]
-                if (!second || !this.checkOverlap(direction, first, second)) return
+                if (!second || !this.checkOverlap(first, second)) return
                 let diff = 0
-                if (isVertical) {
+                if (this.isVertical) {
                     diff = first.x + this.siblingSpacing + first.width - second.x
                 } else {
                     diff = first.y + this.siblingSpacing + first.height - second.y
@@ -206,15 +219,15 @@ class Tree {
 
                 const moveNode = this.findCommonParentNode(first, second)
                 let newPos = 0
-                if (isVertical) {
+                if (this.isVertical) {
                     newPos = moveNode.x + diff
                 } else {
                     newPos = moveNode.y + diff
                 }
-                this.moveTree(direction, moveNode, newPos)
-                this.centerTree(direction, moveNode.parent)
+                this.moveTree(moveNode, newPos)
+                this.centerTree(moveNode.parent)
             })
         })
     }
 }
-export default Tree
+export default Layout
