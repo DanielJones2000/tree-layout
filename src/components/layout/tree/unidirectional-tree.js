@@ -8,8 +8,16 @@ export default class UnidirectionalTree {
     rootY = 0
     direction = null
 
-    constructor(data) {
-        this.root = this.convertObject(data)
+    // 层级间距
+    levelSpacing = 50
+
+    // 兄弟间距
+    siblingSpacing = 20
+
+    constructor(option) {
+        this.levelSpacing = option?.levelSpacing || 50
+        this.siblingSpacing = option?.siblingSpacing || 20
+        this.root = this.convertObject(option.data)
         this.root.isRoot = true
     }
 
@@ -21,11 +29,13 @@ export default class UnidirectionalTree {
         this.rootX = x
         this.rootY = y
         this.direction = direction
-        return new Layout({
+        new Layout({
             root: this.root,
             rootX: this.rootX,
             rootY: this.rootY,
-            direction: this.direction
+            direction: this.direction,
+            levelSpacing: this.levelSpacing,
+            siblingSpacing: this.siblingSpacing
         })
     }
 

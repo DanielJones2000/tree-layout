@@ -15,6 +15,12 @@ export default class MultiDirectionalTree {
     left = null
     right = null
 
+    // 层级间距
+    levelSpacing = 50
+
+    // 兄弟间距
+    siblingSpacing = 20
+
     constructor(option) {
         Object.assign(this, option)
     }
@@ -24,22 +30,38 @@ export default class MultiDirectionalTree {
         this.rootY = y
 
         if (this.top) {
-            this.topTree = new UnidirectionalTree(this.top)
+            this.topTree = new UnidirectionalTree({
+                data: this.top,
+                levelSpacing: this.levelSpacing,
+                siblingSpacing: this.siblingSpacing
+            })
             this.topTree.build(this.rootX, this.rootY, Direction.TOP)
         }
 
         if (this.bottom) {
-            this.bottomTree = new UnidirectionalTree(this.bottom)
+            this.bottomTree = new UnidirectionalTree({
+                data: this.bottom,
+                levelSpacing: this.levelSpacing,
+                siblingSpacing: this.siblingSpacing
+            })
             this.bottomTree.build(this.rootX, this.rootY, Direction.BOTTOM)
         }
 
         if (this.left) {
-            this.leftTree = new UnidirectionalTree(this.left)
+            this.leftTree = new UnidirectionalTree({
+                data: this.left,
+                levelSpacing: this.levelSpacing,
+                siblingSpacing: this.siblingSpacing
+            })
             this.leftTree.build(this.rootX, this.rootY, Direction.LEFT)
         }
 
         if (this.right) {
-            this.rightTree = new UnidirectionalTree(this.right)
+            this.rightTree = new UnidirectionalTree({
+                data: this.right,
+                levelSpacing: this.levelSpacing,
+                siblingSpacing: this.siblingSpacing
+            })
             this.rightTree.build(this.rootX, this.rootY, Direction.RIGHT)
         }
     }

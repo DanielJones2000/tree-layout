@@ -34,6 +34,7 @@ export default {
   methods: {
     layout() {
       this.tree = new TreeLayout({
+        levelSpacing: 80,
         top: JSON.parse(this.text),
         bottom: JSON.parse(this.text),
         // left: JSON.parse(this.text),
