@@ -26,7 +26,7 @@ export function convertObject(data) {
             level,
             parent,
             index,
-            width: size[Math.floor(Math.random() * size.length)],
+            // width: size[Math.floor(Math.random() * size.length)],
             // height: size[Math.floor(Math.random() * size.length)]
         })
 
