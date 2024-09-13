@@ -21,11 +21,6 @@ class Layout {
     // 树布局的方向
     direction = Direction.BOTTOM
 
-    constructor(option) {
-        Object.assign(this, option)
-        this.build(this.direction)
-    }
-
     /**
      * 判断是否会水平放置
      */
@@ -33,9 +28,10 @@ class Layout {
         return this.direction === Direction.TOP || this.direction === Direction.BOTTOM
     }
 
-    build(direction) {
+    auto(option) {
+        this.root = null
         this.treeList = []
-        this.direction = direction
+        Object.assign(this, option)
         this.root.x = this.rootX
         this.root.y = this.rootY
         // 自根到叶子节点遍历并重定位
@@ -230,4 +226,4 @@ class Layout {
         })
     }
 }
-export default Layout
+export default new Layout()

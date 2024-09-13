@@ -39,7 +39,8 @@ export default class UnidirectionalTree {
         this.rootX = x
         this.rootY = y
         this.direction = direction
-        new Layout({
+
+        Layout.auto({
             root: this.root,
             rootX: this.rootX,
             rootY: this.rootY,
