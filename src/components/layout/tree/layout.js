@@ -128,11 +128,11 @@ class Layout {
         let a1 = 0
         let a2 = 0
         if (this.isVertical) {
-            a1 = first.x + first.width
-            a2 = second.x
+            a1 = first.x + first.width / 2
+            a2 = second.x - second.width / 2
         } else {
-            a1 = first.y + first.height
-            a2 = second.y
+            a1 = first.y + first.height / 2
+            a2 = second.y - second.height / 2
         }
         return a2 < a1
     }
@@ -214,11 +214,10 @@ class Layout {
                 if (!second || !this.checkOverlap(first, second)) return
                 let diff = 0
                 if (this.isVertical) {
-                    diff = first.x + this.siblingSpacing + first.width - second.x
+                    diff = first.x + this.siblingSpacing + first.width / 2 + second.width / 2 - second.x
                 } else {
-                    diff = first.y + this.siblingSpacing + first.height - second.y
+                    diff = first.y + this.siblingSpacing + first.height / 2 + second.height / 2 - second.y
                 }
-
                 const moveNode = this.findCommonParentNode(first, second)
                 let newPos = 0
                 if (this.isVertical) {
