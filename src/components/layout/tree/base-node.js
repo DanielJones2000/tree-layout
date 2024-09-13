@@ -44,8 +44,14 @@ export default class Node {
         ctx.save()
         ctx.beginPath()
         ctx.fillStyle = 'red'
-        ctx.arc(this.x, this.y, 6, 0, 2 * Math.PI)
+        ctx.arc(this.x, this.y, 3, 0, 2 * Math.PI)
         ctx.fill()
+        ctx.restore()
+        ctx.save()
+        ctx.fillStyle = 'white'
+        ctx.textAlign = 'center'
+        ctx.font = '12px Arial';
+        ctx.fillText(`(x:${this.x},y:${this.y})`, this.x, this.y - 10)
         ctx.restore()
     }
 }
