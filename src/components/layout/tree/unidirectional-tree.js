@@ -8,6 +8,7 @@ import Link from './link'
 export default class UnidirectionalTree {
     shaps = []
     lines = []
+    data = null
     root = null
     rootX = 0
     rootY = 0
@@ -20,10 +21,9 @@ export default class UnidirectionalTree {
     siblingSpacing = 20
 
     constructor(option) {
+        this.data = option.data
         this.levelSpacing = option?.levelSpacing || 50
         this.siblingSpacing = option?.siblingSpacing || 20
-        this.root = this.convertObject(option.data)
-        this.root.isRoot = true
     }
 
     getShaps() {
@@ -36,9 +36,12 @@ export default class UnidirectionalTree {
 
     build(x, y, direction) {
         this.lines = []
+        this.shaps = []
         this.rootX = x
         this.rootY = y
         this.direction = direction
+        this.root = this.convertObject(this.data)
+        this.root.isRoot = true
 
         Layout.auto({
             root: this.root,
@@ -66,7 +69,8 @@ export default class UnidirectionalTree {
                 },
                 level,
                 parent,
-                index
+                index,
+                direction: this.direction
             })
 
             this.shaps.push(node)

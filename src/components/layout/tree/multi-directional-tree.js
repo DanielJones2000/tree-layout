@@ -36,7 +36,8 @@ export default class MultiDirectionalTree {
             this.topTree = new UnidirectionalTree({
                 data: this.top,
                 levelSpacing: this.levelSpacing,
-                siblingSpacing: this.siblingSpacing
+                siblingSpacing: this.siblingSpacing,
+
             })
             this.topTree.build(this.rootX, this.rootY, Direction.TOP)
         }

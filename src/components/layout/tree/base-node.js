@@ -25,6 +25,9 @@ export default class Node {
     // 是否为根节点
     isRoot = false
 
+    // 绘制方向
+    direction = null
+
     constructor(option) {
         Object.assign(this, option || {})
         this.children = []
@@ -37,9 +40,11 @@ export default class Node {
     draw(ctx) {
         ctx.save()
         ctx.fillStyle = 'lightblue'
-        ctx.fillRect(this.x - this.width / 2, this.y - this.height / 2, this.width, this.height)
+        let x = this.x - this.width / 2
+        let y = this.y - this.height / 2
+        ctx.fillRect(x, y, this.width, this.height)
         ctx.strokeStyle = 'black'
-        ctx.strokeRect(this.x - this.width / 2, this.y - this.height / 2, this.width, this.height)
+        ctx.strokeRect(x, y, this.width, this.height)
         ctx.restore()
         ctx.save()
         ctx.beginPath()
@@ -51,7 +56,7 @@ export default class Node {
         ctx.fillStyle = 'white'
         ctx.textAlign = 'center'
         ctx.font = '12px Arial';
-        ctx.fillText(`(x:${this.x},y:${this.y})`, this.x, this.y - 10)
+        ctx.fillText(`(x:${this.x},y:${this.y})`, this.x, this.y + 16)
         ctx.restore()
     }
 }
