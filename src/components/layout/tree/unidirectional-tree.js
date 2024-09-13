@@ -47,7 +47,7 @@ export default class UnidirectionalTree {
 
         this.shaps.forEach(item => {
             if (!item.parent) return
-            this.lines.push(new Link(this.direction, item.parent.x, item.parent.y, item.x, item.y))
+            this.lines.push(new Link(this.direction, item.parent, item))
         })
 
     }

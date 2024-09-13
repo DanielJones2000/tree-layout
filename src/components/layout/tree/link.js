@@ -18,7 +18,9 @@ export default class Link {
         return this.direction === Direction.TOP || this.direction === Direction.BOTTOM
     }
 
-    constructor(direction, x1, y1, x2, y2) {
+    constructor(direction, startNode, endNode) {
+        const { x: x1, y: y1 } = startNode
+        const { x: x2, y: y2 } = endNode
         this.direction = direction
         this.x1 = x1
         this.y1 = y1
