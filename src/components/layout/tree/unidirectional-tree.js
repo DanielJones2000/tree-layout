@@ -3,7 +3,7 @@ import Layout from './layout'
 import Link from './link'
 
 /**
- * 单向树
+ * 单向缩进树
  */
 export default class UnidirectionalTree {
     shaps = []

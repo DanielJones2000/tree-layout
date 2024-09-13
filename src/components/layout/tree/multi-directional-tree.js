@@ -2,7 +2,7 @@ import UnidirectionalTree from './unidirectional-tree'
 import { Direction } from './constants'
 
 /**
- * 四向树
+ * 四向缩进树
  */
 export default class MultiDirectionalTree {
     topTree = null
