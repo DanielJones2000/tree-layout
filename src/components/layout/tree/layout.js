@@ -48,7 +48,14 @@ class Layout {
     getChildrenDistance(children) {
         let distance = 0
         const distanceMap = {}
-
+        if (children.length === 1) {
+            return {
+                distance: 0,
+                distanceMap: {
+                    0: 0
+                }
+            }
+        }
         children.forEach((item, index) => {
             let nextNode = children.at(index + 1) || { width: 0, height: 0 }
             let nextNodeSize = this.isVertical ? nextNode.width : nextNode.height
@@ -90,7 +97,6 @@ class Layout {
         const { distance, distanceMap } = this.getChildrenDistance(node.children)
         const pos = this.isVertical ? node.x : node.y
         let startPos = pos - distance / 2
-
         node.children.forEach((item, index) => {
             const moveDistance = startPos + (distanceMap[index - 1] || 0)
             if (this.isVertical) {
@@ -227,6 +233,7 @@ class Layout {
                 }
                 this.moveTree(moveNode, newPos)
                 this.centerTree(moveNode.parent)
+                this.locationLRD()
             })
         })
     }
