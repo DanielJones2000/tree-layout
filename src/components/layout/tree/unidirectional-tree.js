@@ -2,6 +2,9 @@ import BaseNode from './base-node'
 import Layout from './layout'
 import Link from './link'
 
+/**
+ * 单向树
+ */
 export default class UnidirectionalTree {
     shaps = []
     lines = []
