@@ -2,7 +2,16 @@
   <div class="layout">
     <div class="left">
       <button @click="layout">布局</button>
-      <canvas class="tree" ref="cav" width="982" height="782"> </canvas>
+      <canvas
+        class="tree"
+        ref="cav"
+        width="982"
+        height="782"
+        @mousedown="mousedown"
+        @mousemove="mousemove"
+        @mouseup="mouseup"
+      >
+      </canvas>
     </div>
     <div class="right">
       <textarea v-model="text" class="text"></textarea>
@@ -21,6 +30,11 @@ export default {
       text: JSON.stringify(TestData, null, 2),
       centerX: 460,
       centerY: 400,
+      offsetX: 0,
+      offsetY: 0,
+      dragStartX: 0,
+      dragStartY: 0,
+      isDragging: false,
     }
   },
   mounted() {
@@ -32,6 +46,26 @@ export default {
     })
   },
   methods: {
+    mousedown(e) {
+      this.isDragging = true
+      this.dragStartX = e.offsetX
+      this.dragStartY = e.offsetY
+      e.target.style.cursor = 'grabbing'
+    },
+    mousemove(e) {
+      if (this.isDragging) {
+        // 计算新的偏移量
+        this.offsetX += e.offsetX - this.dragStartX
+        this.offsetY += e.offsetY - this.dragStartY
+
+        // 更新起始位置
+        this.dragStartX = e.offsetX
+        this.dragStartY = e.offsetY
+      }
+    },
+    mouseup() {
+      this.isDragging = false
+    },
     layout() {
       this.tree = new TreeLayout({
         levelSpacing: 60,
@@ -44,6 +78,8 @@ export default {
     },
     repaint() {
       this.ctx.clearRect(0, 0, 10000, 10000)
+      this.ctx.save()
+      this.ctx.translate(this.offsetX, this.offsetY)
       if (this.tree) {
         this.tree.getLines().forEach((item) => {
           item.draw(this.ctx)
@@ -53,6 +89,7 @@ export default {
           item.draw(this.ctx)
         })
       }
+      this.ctx.restore()
     },
   },
 }
