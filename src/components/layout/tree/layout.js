@@ -50,14 +50,21 @@ class Layout {
         const distanceMap = {}
 
         children.forEach((item, index) => {
-            if (index === children.length - 1) return
-            if (this.isVertical) {
-                distance += item.width + this.siblingSpacing
-                distanceMap[index] = distance
-                return
+            let nextNode = children.at(index + 1) || { width: 0, height: 0 }
+            let nextNodeSize = this.isVertical ? nextNode.width : nextNode.height
+
+            let size = this.isVertical ? item.width : item.height
+            if (index === 0 || index === children.length - 1) {
+                size = this.isVertical ? item.width / 2 : item.height / 2
             }
-            distance += item.height + this.siblingSpacing
-            distanceMap[index] = distance
+
+            if (index === children.length - 1) {
+                distance += size
+            } else {
+                distance += size + this.siblingSpacing
+            }
+
+            distanceMap[index] = distance + nextNodeSize / 2
         })
 
         return {
@@ -81,7 +88,6 @@ class Layout {
         }
 
         const { distance, distanceMap } = this.getChildrenDistance(node.children)
-
         const pos = this.isVertical ? node.x : node.y
         let startPos = pos - distance / 2
 

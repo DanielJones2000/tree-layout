@@ -70,7 +70,9 @@ export default class UnidirectionalTree {
                 level,
                 parent,
                 index,
-                direction: this.direction
+                direction: this.direction,
+                width: item.width,
+                height: item.height
             })
 
             this.shaps.push(node)

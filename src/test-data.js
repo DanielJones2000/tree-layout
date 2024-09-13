@@ -4,21 +4,39 @@ export default {
     children: [
         {
             name: 'Child 1',
+            width: 100,
             children: [
-                { name: 'Grandchild 1' },
-                { name: 'Grandchild 2' },
-                { name: 'Grandchild 3' }
+                {
+                    name: 'Grandchild 1',
+                    width: 100,
+                },
+                {
+                    name: 'Grandchild 2',
+                    width: 100,
+                },
+                {
+                    name: 'Grandchild 3',
+                    width: 100,
+                }
             ]
         },
         {
             name: 'Child 2',
+            width: 300,
             children: [
-                { name: 'Grandchild 5' },
-                { name: 'Grandchild 6' }
+                {
+                    name: 'Grandchild 5',
+                    width: 300,
+                },
+                {
+                    name: 'Grandchild 6',
+                    width: 120,
+                }
             ]
         },
         {
-            name: 'Child 3'
+            name: 'Child 3',
+            width: 150,
         }
     ]
 }

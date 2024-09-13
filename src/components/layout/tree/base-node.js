@@ -30,6 +30,8 @@ export default class Node {
 
     constructor(option) {
         Object.assign(this, option || {})
+        this.width = this.width || 100
+        this.height = this.height || 50
         this.children = []
     }
 
