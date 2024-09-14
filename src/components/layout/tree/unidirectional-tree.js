@@ -12,6 +12,8 @@ export default class UnidirectionalTree {
     root = null
     rootX = 0
     rootY = 0
+    initX = 0
+    initY = 0
     direction = null
 
     // 层级间距
@@ -35,14 +37,19 @@ export default class UnidirectionalTree {
     }
 
     build(x, y, direction) {
-        this.lines = []
         this.shaps = []
         this.rootX = x
         this.rootY = y
+        this.initX = x
+        this.initY = y
         this.direction = direction
         this.root = this.convertObject(this.data)
         this.root.isRoot = true
+        this.autoLayout()
+    }
 
+    autoLayout() {
+        this.lines = []
         Layout.auto({
             root: this.root,
             rootX: this.rootX,
@@ -54,9 +61,16 @@ export default class UnidirectionalTree {
 
         this.shaps.forEach(item => {
             if (!item.parent) return
-            this.lines.push(new Link(this.direction, item.parent, item))
+            let { parent } = item
+            if (parent.isRoot) {
+                parent = {
+                    ...parent,
+                    x: this.initX,
+                    y: this.initY
+                }
+            }
+            this.lines.push(new Link(this.direction, parent, item, this.levelSpacing))
         })
-
     }
 
     convertObject(data) {

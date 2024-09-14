@@ -22,21 +22,21 @@ export default {
         },
         {
             name: 'Child 2',
-            width: 300,
+            width: 100,
             children: [
                 {
                     name: 'Grandchild 5',
-                    width: 300,
+                    width: 100,
                 },
                 {
                     name: 'Grandchild 6',
-                    width: 120,
+                    width: 100,
                 }
             ]
         },
         {
             name: 'Child 3',
-            width: 150,
+            width: 100,
         }
     ]
 }

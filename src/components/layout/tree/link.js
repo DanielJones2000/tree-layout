@@ -12,16 +12,19 @@ export default class Link {
     x4 = 0
     y4 = 0
 
+    levelSpacing = 0
+
     direction = null
 
     get isVertical() {
         return this.direction === Direction.TOP || this.direction === Direction.BOTTOM
     }
 
-    constructor(direction, startNode, endNode) {
+    constructor(direction, startNode, endNode, levelSpacing) {
         const { x: x1, y: y1 } = startNode
         const { x: x2, y: y2 } = endNode
         this.direction = direction
+        this.levelSpacing = levelSpacing
         this.x1 = x1
         this.y1 = y1
 
@@ -34,12 +37,29 @@ export default class Link {
 
             this.x3 = x2
             this.y3 = (y1 + y2) / 2
+            if (startNode.isRoot) {
+                this.y2 = y2 + endNode.height / 2 + this.levelSpacing / 2
+                this.y3 = y2 + endNode.height / 2 + this.levelSpacing / 2
+                if (direction === Direction.BOTTOM) {
+                    this.y2 = y2 - endNode.height / 2 - this.levelSpacing / 2
+                    this.y3 = y2 - endNode.height / 2 - this.levelSpacing / 2
+                }
+            }
         } else {
             this.x2 = (x1 + x2) / 2
             this.y2 = y1
 
             this.x3 = (x1 + x2) / 2
             this.y3 = y2
+            if (startNode.isRoot) {
+                this.x2 = x2 + endNode.width / 2 + this.levelSpacing / 2
+                this.x3 = x2 + endNode.width / 2 + this.levelSpacing / 2
+
+                if (direction === Direction.RIGHT) {
+                    this.x2 = x2 - endNode.width / 2 - this.levelSpacing / 2
+                    this.x3 = x2 - endNode.width / 2 - this.levelSpacing / 2
+                }
+            }
         }
     }
 
