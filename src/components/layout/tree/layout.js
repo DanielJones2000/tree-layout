@@ -111,13 +111,13 @@ class Layout {
                     item.y = node.y - item.height - this.levelSpacing
                     break
                 case Direction.BOTTOM:
-                    item.y = node.y + node.height + this.levelSpacing
+                    item.y = node.y + item.height + this.levelSpacing
                     break
                 case Direction.LEFT:
                     item.x = node.x - item.width - this.levelSpacing
                     break
                 default:
-                    item.x = node.x + node.width + this.levelSpacing
+                    item.x = node.x + item.width + this.levelSpacing
             }
 
             this.locationVLR(item)
